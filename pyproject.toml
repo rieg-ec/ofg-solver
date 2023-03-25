@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "zoom-transcripts"
+version = "0.1.0"
+description = ""
+authors = ["rieg-ec <rieg@uc.cl>"]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+llama-index = "*"
+openai = "*"
+pdfplumber = "^0.8.0"
+tiktoken = "^0.3.2"
+
+[tool.poetry.dev-dependencies]
+pytest = "^5.2"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

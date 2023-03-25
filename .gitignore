@@ -1,0 +1,9 @@
+.env
+__pycache__/
+audios/
+indexes/
+pdfs/
+summaries/
+transcripts/
+videos/
+
