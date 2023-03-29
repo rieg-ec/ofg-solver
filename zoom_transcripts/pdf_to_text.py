@@ -1,4 +1,4 @@
-import sys
+import argparse
 import os
 import re
 import pdfplumber
@@ -40,15 +40,16 @@ def fix_formatting_issues(text):
     return response.choices[0].message["content"].strip()
 
 
-def extract_text_from_pdf(pdf_file_path, output_file_path):
+def extract_text_from_pdf(pdf_file_path, output_file_path, format=True):
     with pdfplumber.open(pdf_file_path) as pdf:
         pages = []
 
         for page in pdf.pages:
             text = page.extract_text()
-            fixed_text = fix_formatting_issues(text)
-            print(fixed_text)
-            pages.append(fixed_text)
+            if format:
+                text = fix_formatting_issues(text)
+            print(text)
+            pages.append(text)
 
         formatted_text = "\n".join(pages)
 
@@ -64,7 +65,19 @@ if __name__ == "__main__":
         help="file path to the pdf file",
     )
 
+    parser.add_argument(
+        "--skip-format",
+        default=False,
+        action="store_true",
+        help="whether to pass the document throught chatGPT to fix formatting issues. \
+            Helpful when pdf output has a bunch of errors.",
+    )
+
     args = parser.parse_args()
 
-    filename_without_extension = re.sub(r"\.txt$", "", args.filepath)
-    extract_text_from_pdf(args.filepath, f"{filename_without_extension}.txt")
+    filename_without_extension = re.sub(r"\.pdf$", "", args.filepath)
+    extract_text_from_pdf(
+        args.filepath,
+        f"{filename_without_extension}.txt",
+        format=(not args.skip_format),
+    )
